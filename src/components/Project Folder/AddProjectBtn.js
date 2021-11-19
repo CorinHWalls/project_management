@@ -43,14 +43,10 @@ function AddProjectBtn() {
   const handleSubmit = async (event) => {
     event.preventDefault(); //stop page from reloading
     
-    // setTimeout(function () {
       await AddProject(newProject);
-    // }, 700);
-
-    
-    // setTimeout(function () {
+ 
      await getProjectsData();
-    // }, 1000);
+
     
     setTimeout(function () {
       window.location.reload(true);

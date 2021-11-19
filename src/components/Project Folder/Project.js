@@ -15,6 +15,7 @@ import { Modal } from "react-bootstrap";
 import EditProject from "./EditProject";
 
 
+
 function Project(props) {
   
   const navigate = useNavigate();
@@ -22,8 +23,11 @@ function Project(props) {
   const [show, setShow] = useState(false);
   const handleModalClose = () => setShow(false);
   const handleModalShow = () => setShow(true);
+  const [modalChecker, setModalChecker] = useState(false);
   let selectedProject = "";
   
+  // console.log(window.innerWidth);
+  // console.log(window.outerWidth);
 
   //used to display all projects or the search can be used to filter
   let filteredResults = props.projects.filter(filter => {
@@ -42,16 +46,23 @@ function Project(props) {
 
   }
 
+  const handleDetails = async () => {
+    setModalChecker(true);
+    handleModalShow();
+  }
+
   const handleDelete = async (event) => {
     setNewID(await getProjectID(event.target.name)); 
    
     selectedProject = event.target.name;
-    console.log(selectedProject);
+    setModalChecker(false);
     handleModalShow();
   }
 
-  const confirmedDelete =  () => {
-   DeleteProject(newID);
+
+  const confirmedDelete = async () => {
+   await DeleteProject(newID);
+   window.location.reload(true);
   }
 
   //for each obj in the project array
@@ -92,6 +103,7 @@ function Project(props) {
                     />
                        
                     <input title="Delete Project" onClick={handleDelete} type="image" name={item.Name} src={TrashIcon} />
+                    <input title="View Info" name={item.Name} onClick={handleDetails} type="image" label="View Project"  src={ViewIcon} />
                   
                     <br />
                   </Typography>
@@ -158,7 +170,7 @@ function Project(props) {
                   </Typography>
                   <Row>
                     <Col className="pt-3">
-                    <input name={item.Name} onClick={handleView} type="image" label="View Tasks"  src={ViewIcon} />
+                    <input name={item.Name} onClick={handleView} type="image" label="View Project"  src={ViewIcon} />
                     <AddTaskBtn Name={item.Name} />
                     </Col>
                    
@@ -173,11 +185,12 @@ function Project(props) {
           </Col>
           
           }
+          { modalChecker != true ?
         <Modal show={show} onHide={handleModalClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Modal heading</Modal.Title>
+          <Modal.Title>Delete {selectedProject} ?</Modal.Title>
         </Modal.Header>
-        <Modal.Body>Are you sure you want to delete  the project? </Modal.Body>
+        <Modal.Body>Are you sure you want to delete this project? </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleModalClose}>
             Cancel
@@ -187,6 +200,28 @@ function Project(props) {
           </Button>
         </Modal.Footer>
       </Modal>
+
+      :<Modal show={show} onHide={handleModalClose}>
+      <Modal.Header closeButton>
+        <Modal.Title>{item.Name} Details</Modal.Title>
+        
+      </Modal.Header>
+      <Modal.Body>Status: {item.Status} | Priority: {item.Priority} </Modal.Body>
+      
+      <Modal.Body>Description: {item.Description}</Modal.Body>
+    
+      <Modal.Footer>
+        {/* <Button variant="secondary" onClick={handleModalClose}>
+          Cancel
+        </Button>
+        <Button variant="primary" onClick={confirmedDelete}>
+          Delete
+        </Button> */}
+      </Modal.Footer>
+    </Modal>
+
+
+          }
           
       </>
     )

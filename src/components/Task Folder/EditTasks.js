@@ -1,6 +1,6 @@
-import React, { useState, useEffect} from "react";
+import React, { useState} from "react";
 import Button from "@mui/material/Button";
-import { getTaskID, updateTaskData, getTasks} from "../../services/firebase";
+import { getTaskID, updateTaskData} from "../../services/firebase";
 import { Modal } from "react-bootstrap";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
@@ -31,9 +31,6 @@ function EditTasks(props) {
         TaskID: newTaskID
       };
       
-    // useEffect( async () => {
-    //   await getTasks(newTaskID);
-    // }, [updates])
 
       const handleInputChanges = (event) => {
         if (event.target.name === "Name") {
@@ -48,9 +45,8 @@ function EditTasks(props) {
       };
     
       const handleSave = async (event) => {
-        console.log(newTaskID)
         await updateTaskData(updates, newTaskID);
-       
+        window.location.reload(true);
       };
 
       const handleEditClick = async (clickedProject) => {
@@ -58,7 +54,6 @@ function EditTasks(props) {
         setNewTaskID(await getTaskID(props.Name));
         let taskID = await getTaskID(props.Name);
         props.setTaskID(taskID);
-        console.log(taskID);
         handleModalShow();
       };
 
@@ -69,7 +64,7 @@ function EditTasks(props) {
         <>
        
         <input title="Edit Task" onClick={handleEditClick} type="image" src={EditIcon} />
-  
+
         <Modal show={show} onHide={handleModalClose}>
           <Modal.Header closeButton>
             <Modal.Title>Edit {currentTask}</Modal.Title>
@@ -134,6 +129,8 @@ function EditTasks(props) {
             </Button>
           </Modal.Footer>
         </Modal>
+
+        
       </>
     )
 }

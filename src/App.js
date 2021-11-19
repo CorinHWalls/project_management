@@ -26,6 +26,7 @@ function App() {
           ProjectID={ProjectID} 
           setNewProjectID={setNewProjectID} 
           setProjDisplayName={setProjDisplayName}
+          projDisplayName={projDisplayName}
           />} />
 
           <Route path="/TaskDashboard" element={<TaskDashboard 
